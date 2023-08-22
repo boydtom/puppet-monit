@@ -1,3 +1,8 @@
+## 2023-08-23 - Release 3.0.1
+### Summary
+
+This release removes support for old Ubuntu, Debian and RedHat operating systems
+
 ## 2020-12-09 - Release 3.0.0
 ### Summary
 

@@ -1,6 +1,6 @@
 {
   "name": "soli-monit",
-  "version": "3.0.0",
+  "version": "3.0.1",
   "author": "Solution Libre SAS",
   "summary": "Puppet module to manage monit installation and configuration",
   "license": "Apache-2.0",
@@ -28,53 +28,44 @@
     {
       "operatingsystem": "Debian",
       "operatingsystemrelease": [
-        "6",
-        "7",
         "8",
         "9",
-        "10"
+        "10",
+        "11",
+        "12"
       ]
     },
     {
       "operatingsystem": "Ubuntu",
       "operatingsystemrelease": [
-        "10.04",
-        "12.04",
         "14.04",
         "16.04",
-        "18.04"
+        "18.04",
+        "20.04",
+        "22.04"
       ]
     },
     {
       "operatingsystem": "RedHat",
       "operatingsystemrelease": [
-        "5",
-        "6",
         "7"
       ]
     },
     {
       "operatingsystem": "CentOS",
       "operatingsystemrelease": [
-        "5",
-        "6",
-        "7",
-        "8"
+        "7"
       ]
     },
     {
       "operatingsystem": "OracleLinux",
       "operatingsystemrelease": [
-        "5",
-        "6",
         "7"
       ]
     },
     {
       "operatingsystem": "Scientific",
       "operatingsystemrelease": [
-        "5",
-        "6",
         "7"
       ]
     }
