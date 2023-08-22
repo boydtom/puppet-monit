@@ -105,8 +105,8 @@
 class monit (
   Array[String]                           $alert_emails              = $monit::params::alert_emails,
   Integer[1]                              $check_interval            = $monit::params::check_interval,
-  String                                  $config_file               = $monit::params::config_file,
-  String                                  $config_dir                = $monit::params::config_dir,
+  Stdlib::Absolutepath                    $config_file               = $monit::params::config_file,
+  Stdlib::Absolutepath                    $config_dir                = $monit::params::config_dir,
   Variant[Boolean, Enum['true', 'false']] $config_dir_purge          = $monit::params::config_dir_purge,
   Variant[Boolean, Enum['true', 'false']] $httpd                     = $monit::params::httpd,
   Integer[1, 65535]                       $httpd_port                = $monit::params::httpd_port,
@@ -177,11 +177,10 @@ class monit (
   # </stringified variable handling>
 
   # <variable validations>
-  validate_absolute_path($config_file)
-  validate_absolute_path($config_dir)
-
-  if $logfile and !($logfile =~ /^syslog(\s+facility\s+log_(local[0-7]|daemon))?/) {
-    validate_absolute_path($logfile)
+  if $logfile {
+    unless $logfile =~ /^syslog(\s+facility\s+log_(local[0-7]|daemon))?/ or $logfile =~ Stdlib::Absolutepath {
+      fail("\$logfile must be either \"syslog[( facility log_<local[0-7]|daemon>)] or absolute path\"")
+    }
   }
   # </variable validations>
 
