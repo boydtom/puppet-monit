@@ -133,43 +133,43 @@ class monit (
   Optional[Integer[1]]                    $start_delay               = $monit::params::start_delay,
 ) inherits monit::params {
   # <stringified variable handling>
-  if is_string($httpd) == true {
+  if $httpd =~ String {
     $httpd_bool = str2bool($httpd)
   } else {
     $httpd_bool = $httpd
   }
 
-  if is_string($manage_firewall) == true {
+  if $manage_firewall =~ String {
     $manage_firewall_bool = str2bool($manage_firewall)
   } else {
     $manage_firewall_bool = $manage_firewall
   }
 
-  if is_string($service_enable) == true {
+  if $service_enable =~ String {
     $service_enable_bool = str2bool($service_enable)
   } else {
     $service_enable_bool = $service_enable
   }
 
-  if is_string($service_manage) == true {
+  if $service_manage =~ String {
     $service_manage_bool = str2bool($service_manage)
   } else {
     $service_manage_bool = $service_manage
   }
 
-  if is_string($mmonit_https) == true {
+  if $mmonit_https =~ String {
     $mmonit_https_bool = str2bool($mmonit_https)
   } else {
     $mmonit_https_bool = $mmonit_https
   }
 
-  if is_string($mmonit_without_credential) == true {
+  if $mmonit_without_credential =~ String {
     $mmonit_without_credential_bool = str2bool($mmonit_without_credential)
   } else {
     $mmonit_without_credential_bool = $mmonit_without_credential
   }
 
-  if is_string($config_dir_purge) == true {
+  if $config_dir_purge =~ String {
     $config_dir_purge_bool = str2bool($config_dir_purge)
   } else {
     $config_dir_purge_bool = $config_dir_purge
