@@ -426,7 +426,7 @@ describe 'monit' do
         expect {
           is_expected.to contain_class('monit')
         }.to raise_error(Puppet::Error, %r{monit supports Debian 10 \(buster\), 11 \(bullseye\) and 12 \(bookworm\) and \
-        Ubuntu 18\.04 \(bionic\), 20\.04 \(focal\) and 22\.04 \(jammy\)\. Detected lsbdistcodename is <etch>\.})
+Ubuntu 18\.04 \(bionic\), 20\.04 \(focal\) and 22\.04 \(jammy\)\. Detected lsbdistcodename is <etch>\.})
       end
     end
 
@@ -451,7 +451,7 @@ describe 'monit' do
         expect {
           is_expected.to contain_class('monit')
         }.to raise_error(Puppet::Error, %r{monit supports Debian 10 \(buster\), 11 \(bullseye\) and 12 \(bookworm\) and \
-        Ubuntu 18\.04 \(bionic\), 20\.04 \(focal\) and 22\.04 \(jammy\)\. Detected lsbdistcodename is <xenial>\.})
+Ubuntu 18\.04 \(bionic\), 20\.04 \(focal\) and 22\.04 \(jammy\)\. Detected lsbdistcodename is <xenial>\.})
       end
     end
 
