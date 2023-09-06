@@ -7,8 +7,17 @@ describe 'monit::check' do
   let(:title) { 'test' }
   let(:facts) do
     {
+      os: {
+        'family' => 'Debian',
+        'distro' => {
+          'codename' => 'buster'
+        },
+        'release' => {
+          'major' => '10'
+        },
+      },
       osfamily:        'Debian',
-      lsbdistcodename: 'squeeze',
+      lsbdistcodename: 'buster',
       monit_version:   '5',
     }
   end
@@ -113,15 +122,22 @@ describe 'monit::check' do
     # set needed custom facts and variables
     let(:facts) do
       {
+        os: {
+          'family' => 'Debian',
+          'distro' => {
+            'codename' => 'buster'
+          },
+          'release' => {
+            'major' => '10'
+          },
+        },
         osfamily:        'Debian',
-        lsbdistcodename: 'squeeze',
+        lsbdistcodename: 'buster',
         monit_version:   '5',
       }
     end
     let(:validation_params) do
-      {
-        #:param => 'value',
-      }
+      {}
     end
 
     validations = {
@@ -149,7 +165,7 @@ describe 'monit::check' do
       var[:name].each do |var_name|
         var[:valid].each do |valid|
           context "with #{var_name} (#{type}) set to valid #{valid} (as #{valid.class})" do
-            let(:params) { validation_params.merge(:"#{var_name}" => valid) }
+            let(:params) { validation_params.merge("#{var_name}": valid) }
 
             it { is_expected.to compile }
           end
@@ -157,7 +173,7 @@ describe 'monit::check' do
 
         var[:invalid].each do |invalid|
           context "with #{var_name} (#{type}) set to invalid #{invalid} (as #{invalid.class})" do
-            let(:params) { validation_params.merge(:"#{var_name}" => invalid) }
+            let(:params) { validation_params.merge("#{var_name}": invalid) }
 
             it 'fails' do
               expect {

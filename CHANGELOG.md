@@ -1,7 +1,10 @@
-## 2023-08-23 - Release 3.0.1
+## 2023-08-23 - Release 3.1.0
 ### Summary
 
 This release removes support for old Ubuntu, Debian and RedHat operating systems
+This release removes support for Amazon Linux
+Renamed module to aursu/monit
+PDK upgrade to 3.0.0
 
 ## 2020-12-09 - Release 3.0.0
 ### Summary

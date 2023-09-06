@@ -40,14 +40,12 @@ class monit::params {
       $lsbdistcodename = $facts['os']['distro']['codename']
 
       case $lsbdistcodename {
-        'jessie', 'stretch', 'buster', 'bullseye', 'bookworm', 'trusty', 'xenial', 'bionic', 'focal', 'jammy': {
+        'buster', 'bullseye', 'bookworm', 'bionic', 'focal', 'jammy': {
           $default_file_content = 'START=yes'
           $service_hasstatus    = true
         }
         default: {
-          fail("monit supports Debian 8 (jessie), 9 (stretch), 10 (buster), 11 (bullseye) and 12 (bookworm) \
-and Ubuntu 14.04 (trusty), 16.04 (xenial), 18.04 (bionic), 20.04 (focal) and 20.04 (jammy). \
-Detected lsbdistcodename is <${lsbdistcodename}>.")
+        fail("monit supports Debian 10 (buster), 11 (bullseye) and 12 (bookworm) and Ubuntu 18.04 (bionic), 20.04 (focal) and 22.04 (jammy). Detected lsbdistcodename is <${lsbdistcodename}>.")
         }
       }
     }
@@ -55,30 +53,14 @@ Detected lsbdistcodename is <${lsbdistcodename}>.")
       $config_dir        = '/etc/monit.d'
       $service_hasstatus = true
       $operatingsystemmajrelease = $facts['os']['release']['major']
-      $operatingsystem = $facts['os']['name']
 
-      case $operatingsystem {
-        'Amazon': {
-          case $operatingsystemmajrelease {
-            '2016', '2018': {
-              $monit_version = '5'
-              $config_file   = '/etc/monit.conf'
-            }
-            default: {
-              fail("monit supports Amazon Linux 2. Detected operatingsystemmajrelease is <${operatingsystemmajrelease}>.")
-            }
-          }
+      case $operatingsystemmajrelease {
+        '7', '8', '9': {
+          $monit_version = '5'
+          $config_file   = '/etc/monitrc'
         }
         default: {
-          case $operatingsystemmajrelease {
-            '7', '8': {
-              $monit_version = '5'
-              $config_file   = '/etc/monitrc'
-            }
-            default: {
-              fail("monit supports EL 7. Detected operatingsystemmajrelease is <${operatingsystemmajrelease}>.")
-            }
-          }
+          fail("monit supports EL 7, 8 and 9. Detected operatingsystemmajrelease is <${operatingsystemmajrelease}>.")
         }
       }
     }

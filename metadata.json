@@ -1,12 +1,12 @@
 {
-  "name": "soli-monit",
-  "version": "3.0.1",
+  "name": "aursu-monit",
+  "version": "3.1.0",
   "author": "Solution Libre SAS",
   "summary": "Puppet module to manage monit installation and configuration",
   "license": "Apache-2.0",
-  "source": "https://github.com/solution-libre/puppet-monit",
-  "project_page": "https://github.com/solution-libre/puppet-monit",
-  "issues_url": "https://github.com/solution-libre/puppet-monit/issues",
+  "source": "https://github.com/aursu/puppet-monit",
+  "project_page": "https://github.com/aursu/puppet-monit",
+  "issues_url": "https://github.com/aursu/puppet-monit/issues",
   "dependencies": [
     {
       "name": "puppetlabs/stdlib",
@@ -14,22 +14,13 @@
     },
     {
       "name": "puppetlabs/firewall",
-      "version_requirement": ">= 1.7.1 < 2.0.0"
+      "version_requirement": ">= 1.7.1 < 7.0.0"
     }
   ],
   "operatingsystem_support": [
     {
-      "operatingsystem": "Amazon",
-      "operatingsystemrelease": [
-        "2016",
-        "2018"
-      ]
-    },
-    {
       "operatingsystem": "Debian",
       "operatingsystemrelease": [
-        "8",
-        "9",
         "10",
         "11",
         "12"
@@ -38,33 +29,20 @@
     {
       "operatingsystem": "Ubuntu",
       "operatingsystemrelease": [
-        "14.04",
-        "16.04",
         "18.04",
         "20.04",
         "22.04"
       ]
     },
     {
-      "operatingsystem": "RedHat",
+      "operatingsystem": "Rocky",
       "operatingsystemrelease": [
-        "7"
+        "8",
+        "9"
       ]
     },
     {
       "operatingsystem": "CentOS",
-      "operatingsystemrelease": [
-        "7"
-      ]
-    },
-    {
-      "operatingsystem": "OracleLinux",
-      "operatingsystemrelease": [
-        "7"
-      ]
-    },
-    {
-      "operatingsystem": "Scientific",
       "operatingsystemrelease": [
         "7"
       ]
@@ -79,7 +57,7 @@
   "tags": [
     "monitoring"
   ],
-  "template-url": "pdk-default#1.18.1",
-  "template-ref": "tags/1.18.1-0-g3d2e75c",
-  "pdk-version": "1.18.1"
+  "template-url": "pdk-default#3.0.0",
+  "template-ref": "tags/3.0.0-0-g056e50d",
+  "pdk-version": "3.0.0"
 }

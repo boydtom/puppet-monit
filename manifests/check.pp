@@ -26,7 +26,7 @@ define monit::check (
   }
   # </variable validations>
 
-  file { "${::monit::config_dir}/${name}":
+  file { "${monit::config_dir}/${name}":
     ensure  => $ensure,
     owner   => 'root',
     group   => 'root',

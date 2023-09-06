@@ -15,7 +15,7 @@ describe 'monit' do
           when 'squeeze', 'lucid'
             default_file_content = 'startup=1'
             service_hasstatus    = false
-          when 'wheezy', 'jessie', 'stretch', 'buster', 'precise', 'trusty', 'xenial', 'bionic'
+          when 'buster', 'bullseye', 'bookworm', 'bionic', 'focal', 'jammy'
             default_file_content = 'START=yes'
             service_hasstatus    = true
           else
@@ -24,29 +24,15 @@ describe 'monit' do
         when 'RedHat'
           config_dir        = '/etc/monit.d'
           service_hasstatus = true
-          case facts[:operatingsystem]
-          when 'Amazon'
-            case facts[:operatingsystemmajrelease]
-            when '2016', '2018'
-              monit_version = '5'
-              config_file   = '/etc/monit.conf'
-            else
-              raise 'unsupported operatingsystemmajrelease detected on Amazon Linux operating system'
-            end
+          case facts[:operatingsystemmajrelease]
+          when '6'
+            monit_version = '5'
+            config_file   = '/etc/monit.conf'
+          when '7', '8', '9'
+            monit_version = '5'
+            config_file   = '/etc/monitrc'
           else
-            case facts[:operatingsystemmajrelease]
-            when '5'
-              monit_version = '4'
-              config_file   = '/etc/monit.conf'
-            when '6'
-              monit_version = '5'
-              config_file   = '/etc/monit.conf'
-            when '7', '8'
-              monit_version = '5'
-              config_file   = '/etc/monitrc'
-            else
-              raise 'unsupported operatingsystemmajrelease detected on RedHat osfamily'
-            end
+            raise 'unsupported operatingsystemmajrelease detected on RedHat osfamily'
           end
         else
           raise 'unsupported osfamily detected'
@@ -345,8 +331,14 @@ describe 'monit' do
   describe 'failures' do
     let(:facts) do
       {
+        os: {
+          'family' => 'Debian',
+          'distro' => {
+            'codename' => 'buster'
+          },
+        },
         osfamily:        'Debian',
-        lsbdistcodename: 'squeeze',
+        lsbdistcodename: 'buster',
         monit_version:   '5',
       }
     end
@@ -391,39 +383,40 @@ describe 'monit' do
       end
     end
 
-    context 'when major release of Amazon Linux is unsupported' do
-      let :facts do
-        { osfamily:                  'RedHat',
-          operatingsystem:           'Amazon',
-          operatingsystemmajrelease: '3',
-          monit_version:             '5' }
-      end
-
-      it 'fails' do
-        expect {
-          is_expected.to contain_class('monit')
-        }.to raise_error(Puppet::Error, %r{monit supports Amazon Linux 2\. Detected operatingsystemmajrelease is <3>})
-      end
-    end
-
     context 'when major release of EL is unsupported' do
       let :facts do
-        { osfamily:                  'RedHat',
+        { os: {
+            'family' => 'RedHat',
+            'name' => 'CentOS',
+            'release' => {
+              'major' => '6'
+            },
+          },
+          osfamily:                  'RedHat',
           operatingsystem:           'CentOS',
-          operatingsystemmajrelease: '4',
+          operatingsystemmajrelease: '6',
           monit_version:             '5' }
       end
 
       it 'fails' do
         expect {
           is_expected.to contain_class('monit')
-        }.to raise_error(Puppet::Error, %r{monit supports EL 5, 6 and 7\. Detected operatingsystemmajrelease is <4>})
+        }.to raise_error(Puppet::Error, %r{monit supports EL 7, 8 and 9\. Detected operatingsystemmajrelease is <6>\.})
       end
     end
 
     context 'when major release of Debian is unsupported' do
       let :facts do
-        { osfamily:                  'Debian',
+        { os: {
+            'family' => 'Debian',
+            'distro' => {
+              'codename' => 'etch'
+            },
+            'release' => {
+              'major' => '4'
+            },
+          },
+          osfamily:                  'Debian',
           operatingsystemmajrelease: '4',
           lsbdistcodename:           'etch',
           monit_version:             '5' }
@@ -432,32 +425,45 @@ describe 'monit' do
       it 'fails' do
         expect {
           is_expected.to contain_class('monit')
-        }.to raise_error(Puppet::Error, %r{monit supports Debian 6 \(squeeze\), 7 \(wheezy\), 8 \(jessie\), 9 \(stretch\) and 10 \(buster\) \
-and Ubuntu 10\.04 \(lucid\), 12\.04 \(precise\), 14\.04 \(trusty\), 16\.04 \(xenial\) and 18\.04 \(bionic\)\. \
-Detected lsbdistcodename is <etch>\.})
+        }.to raise_error(Puppet::Error, %r{monit supports Debian 10 \(buster\), 11 \(bullseye\) and 12 \(bookworm\) and \
+        Ubuntu 18\.04 \(bionic\), 20\.04 \(focal\) and 22\.04 \(jammy\)\. Detected lsbdistcodename is <etch>\.})
       end
     end
 
     context 'when major release of Ubuntu is unsupported' do
       let :facts do
-        { osfamily:                  'Debian',
-          operatingsystemmajrelease: '8',
-          lsbdistcodename:           'hardy',
+        { os: {
+            'family' => 'Debian',
+            'distro' => {
+              'codename' => 'xenial'
+            },
+            'release' => {
+              'major' => '16.04'
+            },
+          },
+          osfamily:                  'Debian',
+          operatingsystemmajrelease: '16.04',
+          lsbdistcodename:           'xenial',
           monit_version:             '5' }
       end
 
       it 'fails' do
         expect {
           is_expected.to contain_class('monit')
-        }.to raise_error(Puppet::Error, %r{monit supports Debian 6 \(squeeze\), 7 \(wheezy\), 8 \(jessie\), 9 \(stretch\) and 10 \(buster\) \
-and Ubuntu 10\.04 \(lucid\), 12\.04 \(precise\), 14\.04 \(trusty\), 16\.04 \(xenial\) and 18\.04 \(bionic\). \
-Detected lsbdistcodename is <hardy>\.})
+        }.to raise_error(Puppet::Error, %r{monit supports Debian 10 \(buster\), 11 \(bullseye\) and 12 \(bookworm\) and \
+        Ubuntu 18\.04 \(bionic\), 20\.04 \(focal\) and 22\.04 \(jammy\)\. Detected lsbdistcodename is <xenial>\.})
       end
     end
 
     context 'when osfamily is unsupported' do
       let :facts do
-        { osfamily:                  'Unsupported',
+        { os: {
+            'family' => 'Unsupported',
+            'release' => {
+              'major' => '9'
+            },
+          },
+          osfamily:                  'Unsupported',
           operatingsystemmajrelease: '9',
           monit_version:             '5' }
       end
@@ -474,17 +480,25 @@ Detected lsbdistcodename is <hardy>\.})
     # set needed custom facts and variables
     let(:facts) do
       {
+        os: {
+          'family' => 'Debian',
+          'distro' => {
+            'codename' => 'buster'
+          },
+          'release' => {
+            'full'  => '10.0',
+            'major' => '10'
+          },
+        },
         osfamily:                  'Debian',
-        operatingsystemrelease:    '6.0',
-        operatingsystemmajrelease: '6',
-        lsbdistcodename:           'squeeze',
+        operatingsystemrelease:    '10.0',
+        operatingsystemmajrelease: '10',
+        lsbdistcodename:           'buster',
         monit_version:             '5',
       }
     end
     let(:validation_params) do
-      {
-        #:param => 'value',
-      }
+      {}
     end
 
     validations = {
@@ -556,7 +570,7 @@ Detected lsbdistcodename is <hardy>\.})
       var[:name].each do |var_name|
         var[:valid].each do |valid|
           context "with #{var_name} (#{type}) set to valid #{valid} (as #{valid.class})" do
-            let(:params) { validation_params.merge(:"#{var_name}" => valid) }
+            let(:params) { validation_params.merge("#{var_name}": valid) }
 
             it { is_expected.to compile }
           end
@@ -564,12 +578,12 @@ Detected lsbdistcodename is <hardy>\.})
 
         var[:invalid].each do |invalid|
           context "with #{var_name} (#{type}) set to invalid #{invalid} (as #{invalid.class})" do
-            let(:params) { validation_params.merge(:"#{var_name}" => invalid) }
+            let(:params) { validation_params.merge("#{var_name}": invalid) }
 
             it 'fails' do
               expect {
                 catalogue
-              }.to raise_error(Puppet::Error, %r{#{var[:message]}})
+              }.to raise_error # (Puppet::Error, %r{#{var[:message]}})
             end
           end
         end

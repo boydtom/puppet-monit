@@ -186,8 +186,8 @@ class monit (
 
   # Use the monit_version fact if available, else use the default for the
   # platform.
-  if defined('$::monit_version') and $::monit_version {
-    $monit_version_real = $::monit_version
+  if $facts['monit_version'] {
+    $monit_version_real = $facts['monit_version']
   } else {
     $monit_version_real = $monit::params::monit_version
   }
