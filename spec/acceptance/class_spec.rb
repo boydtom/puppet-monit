@@ -5,7 +5,7 @@ describe 'monit class' do
     # Using puppet_apply as a helper
     it 'works with no errors' do
       pp = <<-EOS
-      include ::monit
+      include monit
       EOS
 
       # Run it twice and test for idempotency

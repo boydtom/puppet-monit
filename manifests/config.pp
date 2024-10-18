@@ -21,8 +21,8 @@ class monit::config inherits monit {
     owner   => 'root',
     group   => 'root',
     mode    => '0755',
-    purge   => $monit::config_dir_purge_bool,
-    recurse => $monit::config_dir_purge_bool,
+    purge   => $monit::config_dir_purge,
+    recurse => $monit::config_dir_purge,
     require => Package['monit'],
   }
 

@@ -6,34 +6,23 @@ describe 'monit' do
       context "on #{os}" do
         let(:facts) { facts }
 
-        case facts[:osfamily]
+        case facts[:os]['family']
         when 'Debian'
           config_file = '/etc/monit/monitrc'
           config_dir  = '/etc/monit/conf.d'
           monit_version = '5'
-          case facts[:lsbdistcodename]
-          when 'squeeze', 'lucid'
-            default_file_content = 'startup=1'
-            service_hasstatus    = false
-          when 'buster', 'bullseye', 'bookworm', 'bionic', 'focal', 'jammy'
-            default_file_content = 'START=yes'
-            service_hasstatus    = true
-          else
-            raise 'unsupported operatingsystemmajrelease detected on Debian osfamily'
-          end
+          default_file_content = 'START=yes'
+          service_hasstatus    = true
         when 'RedHat'
           config_dir        = '/etc/monit.d'
           service_hasstatus = true
-          case facts[:operatingsystemmajrelease]
-          when '6'
-            monit_version = '5'
-            config_file   = '/etc/monit.conf'
-          when '7', '8', '9'
-            monit_version = '5'
-            config_file   = '/etc/monitrc'
-          else
-            raise 'unsupported operatingsystemmajrelease detected on RedHat osfamily'
-          end
+          monit_version     = '5'
+          config_file = case facts[:os]['name']
+                        when 'Amazon'
+                          '/etc/monit.conf'
+                        else
+                          '/etc/monitrc'
+                        end
         else
           raise 'unsupported osfamily detected'
         end
@@ -75,17 +64,17 @@ describe 'monit' do
         end
 
         monit_config_fixture = if monit_version == '4'
-                                 File.read(fixtures("monitrc.4.#{facts[:osfamily]}"))
+                                 File.read(fixtures("monitrc.4.#{facts[:os]['family']}"))
                                else
-                                 File.read(fixtures("monitrc.#{facts[:osfamily]}"))
+                                 File.read(fixtures("monitrc.#{facts[:os]['family']}"))
                                end
 
         it { is_expected.to contain_file('monit_config').with_content(monit_config_fixture) }
 
-        if facts[:osfamily] == 'Debian'
+        if facts[:os]['family'] == 'Debian'
           it do
-            is_expected.to contain_file('/etc/default/monit').with('notify' => 'Service[monit]')
-                                                             .with_content(%r{^#{default_file_content}$})
+            is_expected.to contain_file('/etc/default/monit').with('notify' => 'Service[monit]').
+              with_content(%r{^#{default_file_content}$})
           end
         else
           it { is_expected.not_to contain_file('/etc/default/monit') }
@@ -114,11 +103,11 @@ describe 'monit' do
           context 'when httpd is set to valid bool <true>' do
             let(:params) { { httpd: true } }
 
-            content = <<-END.gsub(%r{^\s+\|}, '')
-              |set httpd port 2812 and
-              |   use address localhost
-              |   allow 0.0.0.0/0.0.0.0
-              |   allow admin:monit
+            content = <<~END
+              set httpd port 2812 and
+                 use address localhost
+                 allow 0.0.0.0/0.0.0.0
+                 allow admin:monit
             END
             it { is_expected.to contain_file('monit_config').with_content(%r{#{content}}) }
           end
@@ -135,11 +124,11 @@ describe 'monit' do
               }
             end
 
-            content = <<-END.gsub(%r{^\s+\|}, '')
-              |set httpd port 2420 and
-              |   use address otherhost
-              |   allow 0.0.0.0/0.0.0.0
-              |   allow tester:Passw0rd
+            content = <<~END
+              set httpd port 2420 and
+                 use address otherhost
+                 allow 0.0.0.0/0.0.0.0
+                 allow tester:Passw0rd
             END
             it { is_expected.to contain_file('monit_config').with_content(%r{#{content}}) }
           end
@@ -170,9 +159,9 @@ describe 'monit' do
             end
 
             it do
-              is_expected.to contain_firewall('2812 allow Monit inbound traffic').with('action' => 'accept',
-                                                                                       'dport'  => '2812',
-                                                                                       'proto'  => 'tcp')
+              is_expected.to contain_firewall('2812 allow Monit inbound traffic').with('jump' => 'accept',
+                                                                                       'dport' => '2812',
+                                                                                       'proto' => 'tcp')
             end
           end
 
@@ -242,12 +231,12 @@ describe 'monit' do
               }
             end
 
-            content = <<-END.gsub(%r{^\s+\|}, '')
-              |set mail-format \{
-              |    from: monit\@test.local
-              |    message: Monit \$ACTION \$SERVICE at \$DATE on \$HOST: \$DESCRIPTION
-              |    subject: spectesting
-              |\}
+            content = <<~END
+              set mail-format {
+                  from: monit@test.local
+                  message: Monit $ACTION $SERVICE at $DATE on $HOST: $DESCRIPTION
+                  subject: spectesting
+              }
             END
             it { is_expected.to contain_file('monit_config').with_content(%r{#{Regexp.escape(content)}}) }
           end
@@ -262,9 +251,9 @@ describe 'monit' do
               }
             end
 
-            content = <<-END.gsub(%r{^\s+\|}, '')
-              |set alert spec@test.local
-              |set alert tester@test.local
+            content = <<~END
+              set alert spec@test.local
+              set alert tester@test.local
             END
             it { is_expected.to contain_file('monit_config').with_content(%r{#{content}}) }
           end

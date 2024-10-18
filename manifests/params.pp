@@ -45,7 +45,7 @@ class monit::params {
           $service_hasstatus    = true
         }
         default: {
-        fail("monit supports Debian 10 (buster), 11 (bullseye) and 12 (bookworm) and Ubuntu 18.04 (bionic), 20.04 (focal) and 22.04 (jammy). Detected lsbdistcodename is <${lsbdistcodename}>.")
+          fail("monit supports Debian 10 (buster), 11 (bullseye) and 12 (bookworm) and Ubuntu 18.04 (bionic), 20.04 (focal) and 22.04 (jammy). Detected lsbdistcodename is <${lsbdistcodename}>.")
         }
       }
     }
@@ -68,5 +68,4 @@ class monit::params {
       fail("monit supports osfamilies Debian and RedHat. Detected osfamily is <${osfamily}>.")
     }
   }
-  # </OS family handling>
 }

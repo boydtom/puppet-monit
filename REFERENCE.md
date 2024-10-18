@@ -20,11 +20,11 @@
 
 ### Defined types
 
-* [`monit::check`](#monitcheck): Adds a Monit check.
+* [`monit::check`](#monit--check): Adds a Monit check.
 
 ## Classes
 
-### `monit`
+### <a name="monit"></a>`monit`
 
 Main class, includes all other classes.
 
@@ -38,9 +38,38 @@ class { 'monit': }
 
 #### Parameters
 
-The following parameters are available in the `monit` class.
+The following parameters are available in the `monit` class:
 
-##### `alert_emails`
+* [`alert_emails`](#-monit--alert_emails)
+* [`check_interval`](#-monit--check_interval)
+* [`config_file`](#-monit--config_file)
+* [`config_dir`](#-monit--config_dir)
+* [`config_dir_purge`](#-monit--config_dir_purge)
+* [`httpd`](#-monit--httpd)
+* [`httpd_port`](#-monit--httpd_port)
+* [`httpd_address`](#-monit--httpd_address)
+* [`httpd_allow`](#-monit--httpd_allow)
+* [`httpd_user`](#-monit--httpd_user)
+* [`httpd_password`](#-monit--httpd_password)
+* [`logfile`](#-monit--logfile)
+* [`mailserver`](#-monit--mailserver)
+* [`mailformat`](#-monit--mailformat)
+* [`manage_firewall`](#-monit--manage_firewall)
+* [`mmonit_address`](#-monit--mmonit_address)
+* [`mmonit_https`](#-monit--mmonit_https)
+* [`mmonit_port`](#-monit--mmonit_port)
+* [`mmonit_user`](#-monit--mmonit_user)
+* [`mmonit_password`](#-monit--mmonit_password)
+* [`mmonit_without_credential`](#-monit--mmonit_without_credential)
+* [`package_ensure`](#-monit--package_ensure)
+* [`package_name`](#-monit--package_name)
+* [`service_ensure`](#-monit--service_ensure)
+* [`service_manage`](#-monit--service_manage)
+* [`service_name`](#-monit--service_name)
+* [`start_delay`](#-monit--start_delay)
+* [`service_enable`](#-monit--service_enable)
+
+##### <a name="-monit--alert_emails"></a>`alert_emails`
 
 Data type: `Array[String]`
 
@@ -48,55 +77,55 @@ Specifies one or more email addresses to send global alerts to. Default value: [
 
 Default value: `$monit::params::alert_emails`
 
-##### `check_interval`
+##### <a name="-monit--check_interval"></a>`check_interval`
 
-Data type: `Integer[0]`
+Data type: `Integer[1]`
 
 Specifies the interval between two checks of Monit. Default value: 120
 
 Default value: `$monit::params::check_interval`
 
-##### `config_file`
+##### <a name="-monit--config_file"></a>`config_file`
 
-Data type: `String`
+Data type: `Stdlib::Absolutepath`
 
 Specifies a path to the main config file. Default value: varies with operating system
 
 Default value: `$monit::params::config_file`
 
-##### `config_dir`
+##### <a name="-monit--config_dir"></a>`config_dir`
 
-Data type: `String`
+Data type: `Stdlib::Absolutepath`
 
 Specifies a path to the config directory. Default value: varies with operating system
 
 Default value: `$monit::params::config_dir`
 
-##### `config_dir_purge`
+##### <a name="-monit--config_dir_purge"></a>`config_dir_purge`
 
-Data type: `Variant[Boolean, Enum['true', 'false']]`
+Data type: `Boolean`
 
 Specifies if unmanaged files in the config directory should be purged. Default value: 'false'
 
 Default value: `$monit::params::config_dir_purge`
 
-##### `httpd`
+##### <a name="-monit--httpd"></a>`httpd`
 
-Data type: `Variant[Boolean, Enum['true', 'false']]`
+Data type: `Boolean`
 
 Specifies whether to enable the Monit Dashboard. Default value: 'false'
 
 Default value: `$monit::params::httpd`
 
-##### `httpd_port`
+##### <a name="-monit--httpd_port"></a>`httpd_port`
 
-Data type: `Integer[0, 65535]`
+Data type: `Integer[1, 65535]`
 
 Specifies the port of the Monit Dashboard. Default value: 2812
 
 Default value: `$monit::params::httpd_port`
 
-##### `httpd_address`
+##### <a name="-monit--httpd_address"></a>`httpd_address`
 
 Data type: `String`
 
@@ -104,7 +133,7 @@ Specifies the IP address of the Monit Dashboard. Default value: 'locahost'
 
 Default value: `$monit::params::httpd_address`
 
-##### `httpd_allow`
+##### <a name="-monit--httpd_allow"></a>`httpd_allow`
 
 Data type: `String`
 
@@ -112,7 +141,7 @@ Specifies the allow option of the Monit Dashboard. Default value: '0.0.0.0/0.0.0
 
 Default value: `$monit::params::httpd_allow`
 
-##### `httpd_user`
+##### <a name="-monit--httpd_user"></a>`httpd_user`
 
 Data type: `String`
 
@@ -120,7 +149,7 @@ Specifies the user to access the Monit Dashboard. Default value: 'admin'
 
 Default value: `$monit::params::httpd_user`
 
-##### `httpd_password`
+##### <a name="-monit--httpd_password"></a>`httpd_password`
 
 Data type: `String`
 
@@ -128,16 +157,16 @@ Specifies the password to access the Monit Dashboard. Default value: 'monit'
 
 Default value: `$monit::params::httpd_password`
 
-##### `logfile`
+##### <a name="-monit--logfile"></a>`logfile`
 
-Data type: `String`
+Data type: `Optional[String]`
 
 Specifies the logfile directive value. Default value: '/var/log/monit.log'
 It is possible to use syslog instead of direct file logging. (e.g. 'syslog facility log\_daemon')
 
 Default value: `$monit::params::logfile`
 
-##### `mailserver`
+##### <a name="-monit--mailserver"></a>`mailserver`
 
 Data type: `Optional[String]`
 
@@ -146,7 +175,7 @@ For more details, see: https://mmonit.com/monit/documentation/monit.html#Setting
 
 Default value: `$monit::params::mailserver`
 
-##### `mailformat`
+##### <a name="-monit--mailformat"></a>`mailformat`
 
 Data type: `Optional[Hash]`
 
@@ -155,42 +184,44 @@ For more details, see: https://mmonit.com/monit/documentation/monit.html#Message
 
 Default value: `$monit::params::mailformat`
 
-##### `manage_firewall`
+##### <a name="-monit--manage_firewall"></a>`manage_firewall`
 
-Data type: `Variant[Boolean, Enum['true', 'false']]`
+Data type: `Boolean`
 
-If true and if puppetlabs-firewall module is present, Puppet manages firewall to allow HTTP access for Monit Dashboard. Default value: 'false'
+If true and if puppetlabs-firewall module is present, Puppet manages firewall to allow HTTP access for Monit Dashboard.
+Default value: 'false'
 
 Default value: `$monit::params::manage_firewall`
 
-##### `mmonit_address`
+##### <a name="-monit--mmonit_address"></a>`mmonit_address`
 
 Data type: `Optional[String]`
 
 *Requires at least Monit 5.0*<br />
-Specifies the remote address of an M/Monit server to be used by Monit agent for report. If set to undef, M/Monit connection is disabled. Default value: undef
+Specifies the remote address of an M/Monit server to be used by Monit agent for report. If set to undef, M/Monit connection is disabled.
+Default value: undef
 
 Default value: `$monit::params::mmonit_address`
 
-##### `mmonit_https`
+##### <a name="-monit--mmonit_https"></a>`mmonit_https`
 
-Data type: `Variant[Boolean, Enum['true', 'false']]`
+Data type: `Boolean`
 
 *Requires at least Monit 5.0*<br />
 Specifies wheither the protocol of the M/Monit server is HTTPs. Default value: 'true'
 
 Default value: `$monit::params::mmonit_https`
 
-##### `mmonit_port`
+##### <a name="-monit--mmonit_port"></a>`mmonit_port`
 
-Data type: `Integer[0, 65535]`
+Data type: `Integer[1, 65535]`
 
 *Requires at least Monit 5.0*<br />
 Specifies the remote port of the M/Monit server. Default value: 8443
 
 Default value: `$monit::params::mmonit_port`
 
-##### `mmonit_user`
+##### <a name="-monit--mmonit_user"></a>`mmonit_user`
 
 Data type: `String`
 
@@ -200,7 +231,7 @@ If you set both user and password to an empty string, authentication is disabled
 
 Default value: `$monit::params::mmonit_user`
 
-##### `mmonit_password`
+##### <a name="-monit--mmonit_password"></a>`mmonit_password`
 
 Data type: `String`
 
@@ -210,24 +241,28 @@ If you set both user and password to an empty string, authentication is disabled
 
 Default value: `$monit::params::mmonit_password`
 
-##### `mmonit_without_credential`
+##### <a name="-monit--mmonit_without_credential"></a>`mmonit_without_credential`
 
-Data type: `Variant[Boolean, Enum['true', 'false']]`
+Data type: `Boolean`
 
 *Requires at least Monit 5.0*<br />
-By default Monit registers credentials with M/Monit so M/Monit can smoothly communicate back to Monit and you don't have to register Monit credentials manually in M/Monit. It is possible to disable credential registration setting this option to 'true'. Default value: 'false'
+By default Monit registers credentials with M/Monit so M/Monit can smoothly communicate back to Monit and you don't have to register
+Monit credentials manually in M/Monit. It is possible to disable credential registration setting this option to 'true'.
+Default value: 'false'
 
 Default value: `$monit::params::mmonit_without_credential`
 
-##### `package_ensure`
+##### <a name="-monit--package_ensure"></a>`package_ensure`
 
 Data type: `String`
 
-Tells Puppet whether the Monit package should be installed, and what version. Valid options: 'present', 'latest', or a specific version number. Default value: 'present'
+Tells Puppet whether the Monit package should be installed, and what version.
+Valid options: 'present', 'latest', or a specific version number.
+Default value: 'present'
 
 Default value: `$monit::params::package_ensure`
 
-##### `package_name`
+##### <a name="-monit--package_name"></a>`package_name`
 
 Data type: `String`
 
@@ -235,7 +270,7 @@ Tells Puppet what Monit package to manage. Default value: 'monit'
 
 Default value: `$monit::params::package_name`
 
-##### `service_ensure`
+##### <a name="-monit--service_ensure"></a>`service_ensure`
 
 Data type: `Enum['running', 'stopped']`
 
@@ -243,15 +278,15 @@ Tells Puppet whether the Monit service should be running. Default value: 'runnin
 
 Default value: `$monit::params::service_ensure`
 
-##### `service_manage`
+##### <a name="-monit--service_manage"></a>`service_manage`
 
-Data type: `Variant[Boolean, Enum['true', 'false']]`
+Data type: `Boolean`
 
 Tells Puppet whether to manage the Monit service. Default value: 'true'
 
 Default value: `$monit::params::service_manage`
 
-##### `service_name`
+##### <a name="-monit--service_name"></a>`service_name`
 
 Data type: `String`
 
@@ -259,18 +294,18 @@ Tells Puppet what Monit service to manage. Default value: 'monit'
 
 Default value: `$monit::params::service_name`
 
-##### `start_delay`
+##### <a name="-monit--start_delay"></a>`start_delay`
 
-Data type: `Integer[0]`
+Data type: `Optional[Integer[1]]`
 
 *Requires at least Monit 5.0*
-If set, Monit will wait the specified time in seconds before it starts checking services. Default value: 0
+If set, Monit will wait the specified time in seconds before it starts checking services. Default value: undef
 
 Default value: `$monit::params::start_delay`
 
-##### `service_enable`
+##### <a name="-monit--service_enable"></a>`service_enable`
 
-Data type: `Variant[Boolean, Enum['true', 'false']]`
+Data type: `Boolean`
 
 
 
@@ -278,23 +313,27 @@ Default value: `$monit::params::service_enable`
 
 ## Defined types
 
-### `monit::check`
+### <a name="monit--check"></a>`monit::check`
 
 Adds a Monit check.
 
 #### Parameters
 
-The following parameters are available in the `monit::check` defined type.
+The following parameters are available in the `monit::check` defined type:
 
-##### `content`
+* [`content`](#-monit--check--content)
+* [`ensure`](#-monit--check--ensure)
+* [`source`](#-monit--check--source)
+
+##### <a name="-monit--check--content"></a>`content`
 
 Data type: `Optional[String]`
 
 Specifies the content of the configuration file. The `content` and `source` parameters are exclusive of each other.
 
-Default value: ``undef``
+Default value: `undef`
 
-##### `ensure`
+##### <a name="-monit--check--ensure"></a>`ensure`
 
 Data type: `Enum['present', 'absent']`
 
@@ -302,11 +341,11 @@ Tells Puppet whether the check should exist.
 
 Default value: `present`
 
-##### `source`
+##### <a name="-monit--check--source"></a>`source`
 
 Data type: `Optional[String]`
 
 Tells Puppet what is the path of the configuration file. The `content` and `source` parameters are exclusive of each other.
 
-Default value: ``undef``
+Default value: `undef`
 

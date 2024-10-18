@@ -117,89 +117,37 @@ class monit (
   Optional[String]                        $logfile                   = $monit::params::logfile,
   Optional[String]                        $mailserver                = $monit::params::mailserver,
   Optional[Hash]                          $mailformat                = $monit::params::mailformat,
-  Variant[Boolean, Enum['true', 'false']] $manage_firewall           = $monit::params::manage_firewall,
+  Boolean                                 $manage_firewall           = $monit::params::manage_firewall,
   Optional[String]                        $mmonit_address            = $monit::params::mmonit_address,
-  Variant[Boolean, Enum['true', 'false']] $mmonit_https              = $monit::params::mmonit_https,
+  Boolean                                 $mmonit_https              = $monit::params::mmonit_https,
   Integer[1, 65535]                       $mmonit_port               = $monit::params::mmonit_port,
   String                                  $mmonit_user               = $monit::params::mmonit_user,
   String                                  $mmonit_password           = $monit::params::mmonit_password,
-  Variant[Boolean, Enum['true', 'false']] $mmonit_without_credential = $monit::params::mmonit_without_credential,
+  Boolean                                 $mmonit_without_credential = $monit::params::mmonit_without_credential,
   String                                  $package_ensure            = $monit::params::package_ensure,
   String                                  $package_name              = $monit::params::package_name,
-  Variant[Boolean, Enum['true', 'false']] $service_enable            = $monit::params::service_enable,
+  Boolean                                 $service_enable            = $monit::params::service_enable,
   Enum['running', 'stopped']              $service_ensure            = $monit::params::service_ensure,
-  Variant[Boolean, Enum['true', 'false']] $service_manage            = $monit::params::service_manage,
+  Boolean                                 $service_manage            = $monit::params::service_manage,
   String                                  $service_name              = $monit::params::service_name,
   Optional[Integer[1]]                    $start_delay               = $monit::params::start_delay,
 ) inherits monit::params {
-  # <stringified variable handling>
-  if $httpd =~ String {
-    $httpd_bool = str2bool($httpd)
-  } else {
-    $httpd_bool = $httpd
+  if $logfile and !($logfile =~ /^syslog(\s+facility\s+log_(local[0-7]|daemon))?/) {
+    assert_type(Stdlib::Absolutepath, $logfile)
   }
-
-  if $manage_firewall =~ String {
-    $manage_firewall_bool = str2bool($manage_firewall)
-  } else {
-    $manage_firewall_bool = $manage_firewall
-  }
-
-  if $service_enable =~ String {
-    $service_enable_bool = str2bool($service_enable)
-  } else {
-    $service_enable_bool = $service_enable
-  }
-
-  if $service_manage =~ String {
-    $service_manage_bool = str2bool($service_manage)
-  } else {
-    $service_manage_bool = $service_manage
-  }
-
-  if $mmonit_https =~ String {
-    $mmonit_https_bool = str2bool($mmonit_https)
-  } else {
-    $mmonit_https_bool = $mmonit_https
-  }
-
-  if $mmonit_without_credential =~ String {
-    $mmonit_without_credential_bool = str2bool($mmonit_without_credential)
-  } else {
-    $mmonit_without_credential_bool = $mmonit_without_credential
-  }
-
-  if $config_dir_purge =~ String {
-    $config_dir_purge_bool = str2bool($config_dir_purge)
-  } else {
-    $config_dir_purge_bool = $config_dir_purge
-  }
-  # </stringified variable handling>
-
-  # <variable validations>
-  if $logfile {
-    unless $logfile =~ /^syslog(\s+facility\s+log_(local[0-7]|daemon))?/ or $logfile =~ Stdlib::Absolutepath {
-      fail("\$logfile must be either \"syslog[( facility log_<local[0-7]|daemon>)] or absolute path\"")
-    }
-  }
-  # </variable validations>
 
   # Use the monit_version fact if available, else use the default for the
   # platform.
-  if $facts['monit_version'] {
-    $monit_version_real = $facts['monit_version']
-  } else {
-    $monit_version_real = $monit::params::monit_version
-  }
+  $monit_version_real = pick($facts['monit_version'], $monit::params::monit_version)
 
   if($start_delay and $start_delay > 0 and versioncmp($monit_version_real,'5') < 0) {
     fail("start_delay requires at least Monit 5.0. Detected version is <${monit_version_real}>.")
   }
 
-  anchor { "${module_name}::begin": }
-  -> class { "${module_name}::install": }
-  -> class { "${module_name}::config": }
-  ~> class { "${module_name}::service": }
-  -> class { "${module_name}::firewall": }
-  -> anchor { "${module_name}::end": }
+  contain "${module_name}::install"
+  contain "${module_name}::config"
+  contain "${module_name}::service"
+  contain "${module_name}::firewall"
+
+  Class["${module_name}::install"] -> Class["${module_name}::config"] ~> Class["${module_name}::service"] -> Class["${module_name}::firewall"]
 }

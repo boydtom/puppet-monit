@@ -36,7 +36,7 @@ You can use the module [stahnma-epel](https://forge.puppetlabs.com/stahnma/epel)
 ### Beginning with monit
 
 ```puppet
-include ::monit
+include monit
 ```
 
 ## Usage

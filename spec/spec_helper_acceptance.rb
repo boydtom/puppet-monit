@@ -1,22 +1,10 @@
-require 'beaker-rspec'
-require 'pry'
+# frozen_string_literal: true
 
-hosts.each do |host|
-  # Install Puppet
-  on host, install_puppet
-end
+# Managed by modulesync - DO NOT EDIT
+# https://voxpupuli.org/docs/updating-files-managed-with-modulesync/
 
-RSpec.configure do |c|
-  module_root = File.expand_path(File.join(File.dirname(__FILE__), '..'))
+require 'voxpupuli/acceptance/spec_helper_acceptance'
 
-  c.formatter = :documentation
+configure_beaker(modules: :metadata)
 
-  # Configure all nodes in nodeset
-  c.before :suite do
-    # Install module
-    puppet_module_install(source: module_root, module_name: 'monit')
-    hosts.each do |host|
-      on host, puppet('module', 'install', 'puppetlabs-stdlib'), acceptable_exit_codes: [0, 1]
-    end
-  end
-end
+Dir['./spec/support/acceptance/**/*.rb'].sort.each { |f| require f }

@@ -14,14 +14,19 @@
     },
     {
       "name": "puppetlabs/firewall",
-      "version_requirement": ">= 1.7.1 < 7.0.0"
+      "version_requirement": ">= 5.0.0 < 9.0.0"
     }
   ],
   "operatingsystem_support": [
     {
+      "operatingsystem": "Amazon",
+      "operatingsystemrelease": [
+        "2023"
+      ]
+    },
+    {
       "operatingsystem": "Debian",
       "operatingsystemrelease": [
-        "10",
         "11",
         "12"
       ]
@@ -29,9 +34,38 @@
     {
       "operatingsystem": "Ubuntu",
       "operatingsystemrelease": [
-        "18.04",
         "20.04",
         "22.04"
+      ]
+    },
+    {
+      "operatingsystem": "Rocky",
+      "operatingsystemrelease": [
+        "7",
+        "8",
+        "9"
+      ]
+    },
+    {
+      "operatingsystem": "CentOS",
+      "operatingsystemrelease": [
+        "7",
+        "8",
+        "9"
+      ]
+    },
+    {
+      "operatingsystem": "OracleLinux",
+      "operatingsystemrelease": [
+        "8",
+        "9"
+      ]
+    },
+    {
+      "operatingsystem": "AlmaLinux",
+      "operatingsystemrelease": [
+        "8",
+        "9"
       ]
     },
     {
@@ -42,7 +76,7 @@
       ]
     },
     {
-      "operatingsystem": "CentOS",
+      "operatingsystem": "Scientific",
       "operatingsystemrelease": [
         "7"
       ]
