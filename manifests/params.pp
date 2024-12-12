@@ -55,12 +55,12 @@ class monit::params {
       $operatingsystemmajrelease = $facts['os']['release']['major']
 
       case $operatingsystemmajrelease {
-        '7', '8', '9': {
+        '6', '7', '8', '9': {
           $monit_version = '5'
           $config_file   = '/etc/monitrc'
         }
         default: {
-          fail("monit supports EL 7, 8 and 9. Detected operatingsystemmajrelease is <${operatingsystemmajrelease}>.")
+          fail("monit supports EL 6, 7, 8 and 9. Detected operatingsystemmajrelease is <${operatingsystemmajrelease}>.")
         }
       }
     }
